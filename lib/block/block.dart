@@ -10,7 +10,7 @@ class Block {
 
   Block(this.orientations, Color color, this.orientationIndex){
     x = 3;
-    y = -width -1;
+    y = -height;
     this.color = color;
   }
 

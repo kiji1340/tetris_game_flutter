@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tetris_game/block/block.dart';
 import 'package:tetris_game/block/block_movement.dart';
+import 'package:tetris_game/block/sub_block.dart';
 
 import 'block/game_block/i_block.dart';
 import 'block/game_block/j_block.dart';
@@ -15,9 +16,11 @@ import 'block/game_block/z_block.dart';
 
 const BLOCK_X = 10;
 const BLOCK_Y = 20;
-const REFRESH_RATE = 300;
+const REFRESH_RATE = 100;
 const GAME_AREA_BORDER_WIDTH = 2.0;
 const SUB_BLOCK_EDGE_WIDTH = 2.0;
+
+enum Collision { LANDED, LANDED_BLOCK, HIT_WALL, HIT_BLOCK, NONE }
 
 class Game extends StatefulWidget {
   const Game({Key? key}) : super(key: key);
@@ -27,13 +30,16 @@ class Game extends StatefulWidget {
 }
 
 class GameState extends State<Game> {
-  GlobalKey _gameAreaKey = GlobalKey();
+  final GlobalKey _gameAreaKey = GlobalKey();
+  Duration duration = const Duration(milliseconds: REFRESH_RATE);
 
   double _subBlockWidth = 0;
+
   Block? block;
-  Duration duration = const Duration(milliseconds: REFRESH_RATE);
   Timer? timer;
   bool isPlaying = false;
+
+  List<SubBlock>? oldSubBlocks;
 
   Block? getNewBlock() {
     int blockType = Random().nextInt(7);
@@ -62,6 +68,8 @@ class GameState extends State<Game> {
         _gameAreaKey.currentContext?.findRenderObject() as RenderBox?;
     if (gameRender is RenderBox) {
       isPlaying = true;
+      oldSubBlocks = <SubBlock>[];
+
       _subBlockWidth =
           (gameRender.size.width - GAME_AREA_BORDER_WIDTH * 2) / BLOCK_X;
 
@@ -77,9 +85,58 @@ class GameState extends State<Game> {
   }
 
   void onPlay(Timer timer) {
+    if (block == null) {
+      return;
+    }
+
+    var status = Collision.NONE;
+
     setState(() {
-      block?.move(BlockMovement.DOWN);
+      if (!checkAtBottom(block!)) {
+        if(!checkAboveBlock(block!)){
+          block!.move(BlockMovement.DOWN);
+        }else{
+          status = Collision.LANDED_BLOCK;
+        }
+
+      } else {
+        status = Collision.LANDED;
+      }
+
+      if (status == Collision.LANDED || status == Collision.LANDED_BLOCK) {
+        for (var subBlock in block!.subBlocks) {
+          subBlock.x += block!.x;
+          subBlock.y += block!.y;
+
+          oldSubBlocks?.add(subBlock);
+        }
+
+        block = getNewBlock();
+      }
     });
+  }
+
+  bool checkAtBottom(Block block) {
+    return block.y + block.height == BLOCK_Y;
+  }
+
+  bool checkAboveBlock(Block block){
+    if(oldSubBlocks == null || oldSubBlocks!.isEmpty){
+      return false;
+    }
+
+    for (var oldSubBlock  in oldSubBlocks!){
+      for (var subBlock in block.subBlocks){
+        var x = block.x + subBlock.x;
+        var y = block.y + subBlock.y;
+
+        if(x == oldSubBlock.x && y + 1 == oldSubBlock.y){
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   Positioned getPositionedSquareContainer(Color color, int x, int y) {
@@ -110,6 +167,15 @@ class GameState extends State<Game> {
         subBlock.y + block!.y,
       ));
     }
+
+    //old sub-block
+    oldSubBlocks?.forEach((oldSubBlock) {
+      subBlocks.add(getPositionedSquareContainer(
+        oldSubBlock.color,
+        oldSubBlock.x,
+        oldSubBlock.y,
+      ));
+    });
     return Stack(
       children: subBlocks,
     );
@@ -124,7 +190,7 @@ class GameState extends State<Game> {
         decoration: BoxDecoration(
             color: Colors.indigo[800],
             border: Border.all(
-              width: 2.0,
+              width: GAME_AREA_BORDER_WIDTH,
               color: Colors.indigoAccent,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(10.0))),
