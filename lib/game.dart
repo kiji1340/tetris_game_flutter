@@ -171,7 +171,7 @@ class GameState extends State<Game> {
     //old sub-block
     oldSubBlocks?.forEach((oldSubBlock) {
       subBlocks.add(getPositionedSquareContainer(
-        oldSubBlock.color,
+        Colors.grey[500]!,
         oldSubBlock.x,
         oldSubBlock.y,
       ));
