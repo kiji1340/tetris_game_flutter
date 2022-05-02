@@ -8,8 +8,8 @@ class SBlock extends Block{
       [
         [SubBlock(1, 0), SubBlock(2, 0),SubBlock(0, 1),SubBlock(1, 1)],
         [SubBlock(0, 0), SubBlock(0, 1),SubBlock(1, 1),SubBlock(1, 2)],
-        [SubBlock(1, 0), SubBlock(2, 0),SubBlock(0, 1),SubBlock(2, 1)],
-        [SubBlock(0, 0), SubBlock(0, 1),SubBlock(1, 1),SubBlock(1, 2)]
+        [SubBlock(1, 0), SubBlock(2, 0),SubBlock(0, 1),SubBlock(1, 1)],
+        [SubBlock(0, 0), SubBlock(0, 1),SubBlock(1, 1),SubBlock(1, 2)],
       ],
       Colors.orange[300]!,
       orientationIndex
