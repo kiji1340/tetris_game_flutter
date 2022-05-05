@@ -14,9 +14,9 @@ import 'block/game_block/s_block.dart';
 import 'block/game_block/t_block.dart';
 import 'block/game_block/z_block.dart';
 
-const BLOCK_X = 10;
-const BLOCK_Y = 20;
-const REFRESH_RATE = 100;
+const BLOCKS_X = 10;
+const BLOCKS_Y = 20;
+const REFRESH_RATE = 300;
 const GAME_AREA_BORDER_WIDTH = 2.0;
 const SUB_BLOCK_EDGE_WIDTH = 2.0;
 
@@ -35,9 +35,11 @@ class GameState extends State<Game> {
 
   double _subBlockWidth = 0;
 
+  BlockMovement? _blockMovement;
   Block? block;
   Timer? timer;
   bool isPlaying = false;
+  int _score = 0;
 
   List<SubBlock>? oldSubBlocks;
 
@@ -51,7 +53,7 @@ class GameState extends State<Game> {
       case 2:
         return LBlock(0);
       case 3:
-        return OBlock(1);
+        return OBlock(0);
       case 4:
         return SBlock(0);
       case 5:
@@ -69,9 +71,10 @@ class GameState extends State<Game> {
     if (gameRender is RenderBox) {
       isPlaying = true;
       oldSubBlocks = <SubBlock>[];
+      _score = 0;
 
       _subBlockWidth =
-          (gameRender.size.width - GAME_AREA_BORDER_WIDTH * 2) / BLOCK_X;
+          (gameRender.size.width - GAME_AREA_BORDER_WIDTH * 2) / BLOCKS_X;
 
       block = getNewBlock();
 
@@ -92,13 +95,43 @@ class GameState extends State<Game> {
     var status = Collision.NONE;
 
     setState(() {
+      if (_blockMovement != null) {
+        if (!checkOnEdge(_blockMovement!, block!)) {
+          block?.move(_blockMovement!);
+        }
+      }
+
+      //Reverse action if the block hit other sub-blocks
+      if (oldSubBlocks != null) {
+        for (var oldSubBlock in oldSubBlocks!) {
+          for (var subBlock in block!.subBlocks) {
+            var x = block!.x + subBlock.x;
+            var y = block!.y + subBlock.y;
+            if (x == oldSubBlock.x && y == oldSubBlock.y) {
+              switch (_blockMovement) {
+                case BlockMovement.LEFT:
+                  block?.move(BlockMovement.RIGHT);
+                  break;
+                case BlockMovement.RIGHT:
+                  block?.move(BlockMovement.LEFT);
+                  break;
+                case BlockMovement.ROTATE_CLOCKWISE:
+                  block?.move(BlockMovement.ROTATE_COUNTER_CLOCKWISE);
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+        }
+      }
+
       if (!checkAtBottom(block!)) {
-        if(!checkAboveBlock(block!)){
+        if (!checkAboveBlock(block!)) {
           block!.move(BlockMovement.DOWN);
-        }else{
+        } else {
           status = Collision.LANDED_BLOCK;
         }
-
       } else {
         status = Collision.LANDED;
       }
@@ -113,30 +146,75 @@ class GameState extends State<Game> {
 
         block = getNewBlock();
       }
+
+      _blockMovement = null;
+      updateScore();
     });
   }
 
-  bool checkAtBottom(Block block) {
-    return block.y + block.height == BLOCK_Y;
+  void updateScore() {
+    var combo = 1;
+    Map<int, int> rows = {};
+    List<int> rowsToBeRemoved = [];
+
+    // Count number of sub-blocks in each row
+    oldSubBlocks?.forEach((subBlock) {
+      rows.update(subBlock.y, (value) => ++value, ifAbsent: () => 1);
+    });
+
+    // Add score if a full row is found
+    rows.forEach((rowNum, count) {
+      if (count == BLOCKS_X) {
+        _score += combo++;
+        print("score = $_score");
+        rowsToBeRemoved.add(rowNum);
+      }
+    });
+
+    if (rowsToBeRemoved.isNotEmpty) {
+      removeRows(rowsToBeRemoved);
+    }
   }
 
-  bool checkAboveBlock(Block block){
-    if(oldSubBlocks == null || oldSubBlocks!.isEmpty){
+  void removeRows(List<int> rowsToBeRemoved) {
+    rowsToBeRemoved.sort();
+    for (var rowNum in rowsToBeRemoved) {
+      oldSubBlocks?.removeWhere((subBlock) => subBlock.y == rowNum);
+      oldSubBlocks?.forEach((subBlock) {
+        if (subBlock.y < rowNum) {
+          ++subBlock.y;
+        }
+      });
+    }
+  }
+
+  bool checkAtBottom(Block block) {
+    return block.y + block.height == BLOCKS_Y;
+  }
+
+  bool checkAboveBlock(Block block) {
+    if (oldSubBlocks == null || oldSubBlocks!.isEmpty) {
       return false;
     }
 
-    for (var oldSubBlock  in oldSubBlocks!){
-      for (var subBlock in block.subBlocks){
+    for (var oldSubBlock in oldSubBlocks!) {
+      for (var subBlock in block.subBlocks) {
         var x = block.x + subBlock.x;
         var y = block.y + subBlock.y;
 
-        if(x == oldSubBlock.x && y + 1 == oldSubBlock.y){
+        if (x == oldSubBlock.x && y + 1 == oldSubBlock.y) {
           return true;
         }
       }
     }
 
     return false;
+  }
+
+  bool checkOnEdge(BlockMovement blockMovement, Block block) {
+    return (blockMovement == BlockMovement.LEFT && block.x <= 0) ||
+        (blockMovement == BlockMovement.RIGHT &&
+            block.x + block.width >= BLOCKS_X);
   }
 
   Positioned getPositionedSquareContainer(Color color, int x, int y) {
@@ -183,18 +261,30 @@ class GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: BLOCK_X / BLOCK_Y,
-      child: Container(
-        key: _gameAreaKey,
-        decoration: BoxDecoration(
-            color: Colors.indigo[800],
-            border: Border.all(
-              width: GAME_AREA_BORDER_WIDTH,
-              color: Colors.indigoAccent,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(10.0))),
-        child: drawBlocks(),
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        if (details.delta.dx > 0) {
+          _blockMovement = BlockMovement.RIGHT;
+        } else {
+          _blockMovement = BlockMovement.LEFT;
+        }
+      },
+      onTap: () {
+        _blockMovement = BlockMovement.ROTATE_CLOCKWISE;
+      },
+      child: AspectRatio(
+        aspectRatio: BLOCKS_X / BLOCKS_Y,
+        child: Container(
+          key: _gameAreaKey,
+          decoration: BoxDecoration(
+              color: Colors.indigo[800],
+              border: Border.all(
+                width: GAME_AREA_BORDER_WIDTH,
+                color: Colors.indigoAccent,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+          child: drawBlocks(),
+        ),
       ),
     );
   }
