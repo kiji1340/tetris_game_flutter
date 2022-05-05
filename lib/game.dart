@@ -16,7 +16,7 @@ import 'block/game_block/z_block.dart';
 
 const BLOCKS_X = 10;
 const BLOCKS_Y = 20;
-const REFRESH_RATE = 300;
+const REFRESH_RATE = 100;
 const GAME_AREA_BORDER_WIDTH = 2.0;
 const SUB_BLOCK_EDGE_WIDTH = 2.0;
 
@@ -30,6 +30,7 @@ class Game extends StatefulWidget {
 }
 
 class GameState extends State<Game> {
+  bool _isGameOver = false;
   final GlobalKey _gameAreaKey = GlobalKey();
   Duration duration = const Duration(milliseconds: REFRESH_RATE);
 
@@ -70,8 +71,10 @@ class GameState extends State<Game> {
         _gameAreaKey.currentContext?.findRenderObject() as RenderBox?;
     if (gameRender is RenderBox) {
       isPlaying = true;
-      oldSubBlocks = <SubBlock>[];
+      _isGameOver = false;
       _score = 0;
+
+      oldSubBlocks = <SubBlock>[];
 
       _subBlockWidth =
           (gameRender.size.width - GAME_AREA_BORDER_WIDTH * 2) / BLOCKS_X;
@@ -136,7 +139,11 @@ class GameState extends State<Game> {
         status = Collision.LANDED;
       }
 
-      if (status == Collision.LANDED || status == Collision.LANDED_BLOCK) {
+      if (status == Collision.LANDED_BLOCK && block!.y < 0) {
+        _isGameOver = true;
+        endGame();
+      } else if (status == Collision.LANDED ||
+          status == Collision.LANDED_BLOCK) {
         for (var subBlock in block!.subBlocks) {
           subBlock.x += block!.x;
           subBlock.y += block!.y;
@@ -254,8 +261,36 @@ class GameState extends State<Game> {
         oldSubBlock.y,
       ));
     });
+
+    if (_isGameOver) {
+      subBlocks.add(getGameOverRect());
+    }
     return Stack(
       children: subBlocks,
+    );
+  }
+
+  Positioned getGameOverRect() {
+    return Positioned(
+      child: Container(
+        width: _subBlockWidth * 8.0,
+        height: _subBlockWidth * 3.0,
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        child: const Text(
+          'Game Over',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      left: _subBlockWidth,
+      top: _subBlockWidth * 8.0,
     );
   }
 
