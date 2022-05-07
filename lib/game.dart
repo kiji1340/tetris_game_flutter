@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tetris_game/block/block.dart';
 import 'package:tetris_game/block/block_movement.dart';
 import 'package:tetris_game/block/sub_block.dart';
+import 'package:tetris_game/data/DataNotifier.dart';
 
 import 'block/game_block/i_block.dart';
 import 'block/game_block/j_block.dart';
@@ -16,7 +18,7 @@ import 'block/game_block/z_block.dart';
 
 const BLOCKS_X = 10;
 const BLOCKS_Y = 20;
-const REFRESH_RATE = 100;
+const REFRESH_RATE = 500;
 const GAME_AREA_BORDER_WIDTH = 2.0;
 const SUB_BLOCK_EDGE_WIDTH = 2.0;
 
@@ -39,8 +41,8 @@ class GameState extends State<Game> {
   BlockMovement? _blockMovement;
   Block? block;
   Timer? timer;
-  bool isPlaying = false;
-  int _score = 0;
+  // bool isPlaying = false;
+  // int _score = 0;
 
   List<SubBlock>? oldSubBlocks;
 
@@ -70,9 +72,9 @@ class GameState extends State<Game> {
     RenderBox? gameRender =
         _gameAreaKey.currentContext?.findRenderObject() as RenderBox?;
     if (gameRender is RenderBox) {
-      isPlaying = true;
+      context.read<DataNotifier>().setIsPlaying(true);
+      context.read<DataNotifier>().setScore(0);
       _isGameOver = false;
-      _score = 0;
 
       oldSubBlocks = <SubBlock>[];
 
@@ -86,7 +88,7 @@ class GameState extends State<Game> {
   }
 
   void endGame() {
-    isPlaying = false;
+    context.read<DataNotifier>().setIsPlaying(false);
     timer?.cancel();
   }
 
@@ -172,8 +174,7 @@ class GameState extends State<Game> {
     // Add score if a full row is found
     rows.forEach((rowNum, count) {
       if (count == BLOCKS_X) {
-        _score += combo++;
-        print("score = $_score");
+        context.read<DataNotifier>().addScore(combo++);
         rowsToBeRemoved.add(rowNum);
       }
     });

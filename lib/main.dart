@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tetris_game/data/DataNotifier.dart';
 import 'package:tetris_game/game.dart';
 import 'package:tetris_game/next_block.dart';
 import 'package:tetris_game/score_bar.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(ChangeNotifierProvider(
+      create: (context) => DataNotifier(),
+      child: const MyApp(),
+    ));
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -66,10 +73,10 @@ class _TetrisState extends State<Tetris> {
                                 height: 30,
                               ),
                               ElevatedButton(
-                                child: Text(_gameKey.currentState != null &&
-                                        _gameKey.currentState!.isPlaying
-                                    ? 'End'
-                                    : 'Start'),
+                                child: Text(
+                                    context.watch<DataNotifier>().isPlaying
+                                        ? 'End'
+                                        : 'Start'),
                                 style: ElevatedButton.styleFrom(
                                     textStyle: TextStyle(
                                       fontSize: 18,
@@ -77,12 +84,9 @@ class _TetrisState extends State<Tetris> {
                                     ),
                                     primary: Colors.indigo[700]),
                                 onPressed: () {
-                                  setState(() {
-                                    _gameKey.currentState != null &&
-                                            _gameKey.currentState!.isPlaying
-                                        ? _gameKey.currentState!.endGame()
-                                        : _gameKey.currentState!.startGame();
-                                  });
+                                  context.read<DataNotifier>().isPlaying
+                                      ? _gameKey.currentState!.endGame()
+                                      : _gameKey.currentState!.startGame();
                                 },
                               )
                             ],

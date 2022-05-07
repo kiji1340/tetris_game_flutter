@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tetris_game/data/DataNotifier.dart';
 
 class ScoreBar extends StatefulWidget {
   const ScoreBar({Key? key}) : super(key: key);
@@ -18,12 +20,12 @@ class _ScoreBarState extends State<ScoreBar> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const <Widget>[
+        children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Text(
-              'Score: 0',
-              style: TextStyle(
+              'Score:  ${context.watch<DataNotifier>().score}',
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
