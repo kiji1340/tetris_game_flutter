@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tetris_game/data/DataNotifier.dart';
+import 'package:tetris_game/data/data_notifier.dart';
 import 'package:tetris_game/game.dart';
 import 'package:tetris_game/next_block.dart';
 import 'package:tetris_game/score_bar.dart';

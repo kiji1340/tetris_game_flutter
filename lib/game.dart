@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tetris_game/block/block.dart';
 import 'package:tetris_game/block/block_movement.dart';
 import 'package:tetris_game/block/sub_block.dart';
-import 'package:tetris_game/data/DataNotifier.dart';
+import 'package:tetris_game/data/data_notifier.dart';
 
 import 'block/game_block/i_block.dart';
 import 'block/game_block/j_block.dart';
