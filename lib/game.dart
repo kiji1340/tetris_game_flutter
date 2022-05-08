@@ -82,6 +82,11 @@ class GameState extends State<Game> {
           (gameRender.size.width - GAME_AREA_BORDER_WIDTH * 2) / BLOCKS_X;
 
       block = getNewBlock();
+      Block? newBlock = getNewBlock();
+      if(newBlock != null) {
+        context.read<DataNotifier>().setNextBlock(newBlock);
+      }
+
 
       timer = Timer.periodic(duration, onPlay);
     }
@@ -153,7 +158,11 @@ class GameState extends State<Game> {
           oldSubBlocks?.add(subBlock);
         }
 
-        block = getNewBlock();
+        block = context.read<DataNotifier>().nextBlock;
+        Block? newBlock = getNewBlock();
+        if(newBlock != null){
+          context.read<DataNotifier>().setNextBlock(newBlock);
+        }
       }
 
       _blockMovement = null;

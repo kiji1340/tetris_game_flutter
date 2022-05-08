@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tetris_game/data/DataNotifier.dart';
 
 class NextBlock extends StatefulWidget {
   const NextBlock({Key? key}) : super(key: key);
@@ -33,6 +35,9 @@ class _NextBlock extends State<NextBlock> {
             aspectRatio: 1,
             child: Container(
               color: Colors.indigo[600],
+              child: Center(
+                child: context.watch<DataNotifier>().getNextBlockWidget(),
+              ),
             ),
           ),
         ],
