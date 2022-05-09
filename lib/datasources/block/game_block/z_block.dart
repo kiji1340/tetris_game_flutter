@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tetris_game/block/sub_block.dart';
 
 import '../block.dart';
+import '../sub_block.dart';
 
 class ZBlock extends Block{
   ZBlock(int orientationIndex): super(

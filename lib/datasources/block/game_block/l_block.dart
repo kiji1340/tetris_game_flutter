@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tetris_game/block/block.dart';
-import 'package:tetris_game/block/sub_block.dart';
+
+import '../block.dart';
+import '../sub_block.dart';
 
 class LBlock extends Block{
   LBlock(int orientationIndex): super(

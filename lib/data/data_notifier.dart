@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tetris_game/block/block.dart';
 
+import '../datasources/block/block.dart';
+
 class DataNotifier with ChangeNotifier {
   int score = 0;
   bool isPlaying = false;

@@ -3,18 +3,19 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tetris_game/block/block.dart';
-import 'package:tetris_game/block/block_movement.dart';
-import 'package:tetris_game/block/sub_block.dart';
 import 'package:tetris_game/data/data_notifier.dart';
 
-import 'block/game_block/i_block.dart';
-import 'block/game_block/j_block.dart';
-import 'block/game_block/l_block.dart';
-import 'block/game_block/o_block.dart';
-import 'block/game_block/s_block.dart';
-import 'block/game_block/t_block.dart';
-import 'block/game_block/z_block.dart';
+import 'datasources/block/block.dart';
+import 'datasources/block/block_movement.dart';
+import 'datasources/block/game_block/i_block.dart';
+import 'datasources/block/game_block/j_block.dart';
+import 'datasources/block/game_block/l_block.dart';
+import 'datasources/block/game_block/o_block.dart';
+import 'datasources/block/game_block/s_block.dart';
+import 'datasources/block/game_block/t_block.dart';
+import 'datasources/block/game_block/z_block.dart';
+import 'datasources/block/sub_block.dart';
+
 
 const BLOCKS_X = 10;
 const BLOCKS_Y = 20;
