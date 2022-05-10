@@ -16,7 +16,6 @@ import '../data/datasources/block/game_block/t_block.dart';
 import '../data/datasources/block/game_block/z_block.dart';
 import '../data/datasources/block/sub_block.dart';
 
-
 const BLOCKS_X = 10;
 const BLOCKS_Y = 20;
 const REFRESH_RATE = 500;
@@ -42,6 +41,7 @@ class GameState extends State<Game> {
   BlockMovement? _blockMovement;
   Block? block;
   Timer? timer;
+
   // bool isPlaying = false;
   // int _score = 0;
 
@@ -84,10 +84,9 @@ class GameState extends State<Game> {
 
       block = getNewBlock();
       Block? newBlock = getNewBlock();
-      if(newBlock != null) {
+      if (newBlock != null) {
         context.read<DataNotifier>().setNextBlock(newBlock);
       }
-
 
       timer = Timer.periodic(duration, onPlay);
     }
@@ -161,7 +160,7 @@ class GameState extends State<Game> {
 
         block = context.read<DataNotifier>().nextBlock;
         Block? newBlock = getNewBlock();
-        if(newBlock != null){
+        if (newBlock != null) {
           context.read<DataNotifier>().setNextBlock(newBlock);
         }
       }

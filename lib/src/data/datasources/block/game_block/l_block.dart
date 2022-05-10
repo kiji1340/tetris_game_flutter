@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/app_color.dart';
 import '../block.dart';
 import '../sub_block.dart';
 
@@ -11,7 +12,7 @@ class LBlock extends Block{
         [SubBlock(0, 0), SubBlock(1, 0),SubBlock(1, 1),SubBlock(1, 2)],
         [SubBlock(2, 0), SubBlock(0, 1),SubBlock(2, 0),SubBlock(2, 1)]
       ],
-      Colors.green[300]!,
+      AppColor.LBlock,
       orientationIndex
   );
 }

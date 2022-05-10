@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tetris_game/src/core/app_color.dart';
 
 import '../block.dart';
 import '../sub_block.dart';
@@ -11,7 +12,7 @@ class OBlock extends Block{
         [SubBlock(0, 0), SubBlock(1, 0),SubBlock(0, 1),SubBlock(1, 1)],
         [SubBlock(0, 0), SubBlock(1, 0),SubBlock(0, 1),SubBlock(1, 1)]
       ],
-      Colors.blue[300]!,
+      AppColor.OBlock,
       orientationIndex
   );
 }
