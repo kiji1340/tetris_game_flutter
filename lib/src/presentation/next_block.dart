@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tetris_game/data/data_notifier.dart';
+
+import '../data/data_notifier.dart';
 
 class NextBlock extends StatefulWidget {
   const NextBlock({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tetris_game/datasources/block/sub_block.dart';
+import 'package:tetris_game/src/data/datasources/block/sub_block.dart';
 
 import 'block_movement.dart';
 

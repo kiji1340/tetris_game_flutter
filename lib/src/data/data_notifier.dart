@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../datasources/block/block.dart';
+import 'datasources/block/block.dart';
 
 class DataNotifier with ChangeNotifier {
   int score = 0;
