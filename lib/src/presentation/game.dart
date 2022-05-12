@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tetris_game/src/config/app_color.dart';
 
 import '../data/data_notifier.dart';
 import '../data/datasources/block/block.dart';
@@ -266,7 +267,7 @@ class GameState extends State<Game> {
     //old sub-block
     oldSubBlocks?.forEach((oldSubBlock) {
       subBlocks.add(getPositionedSquareContainer(
-        Colors.grey[500]!,
+        AppColor.subBlock,
         oldSubBlock.x,
         oldSubBlock.y,
       ));

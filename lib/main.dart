@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tetris_game/src/data/data_notifier.dart';
+import 'package:tetris_game/src/domain/usecases/generate_new_block.dart';
 import 'package:tetris_game/src/presentation/game.dart';
 import 'package:tetris_game/src/presentation/next_block.dart';
 import 'package:tetris_game/src/presentation/score_bar.dart';
 
-void main() => runApp(ChangeNotifierProvider(
-      create: (context) => DataNotifier(),
-      child: const MyApp(),
-    ));
+Future<void> main() async {
+  runApp(ChangeNotifierProvider(
+    create: (context) => DataNotifier(),
+    child: MyApp(),
+  ));
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  GenerateNewBlock usecase = GenerateNewBlock();
 
   @override
   Widget build(BuildContext context) {
