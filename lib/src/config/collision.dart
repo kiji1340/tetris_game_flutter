@@ -1,0 +1,1 @@
+enum Collision { LANDED, LANDED_BLOCK, HIT_WALL, HIT_BLOCK, NONE }

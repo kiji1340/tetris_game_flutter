@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tetris_game/src/config/app_color.dart';
 
-import '../data/data_notifier.dart';
-import '../data/datasources/block/block.dart';
-import '../data/datasources/block/block_movement.dart';
-import '../data/datasources/block/game_block/i_block.dart';
-import '../data/datasources/block/game_block/j_block.dart';
-import '../data/datasources/block/game_block/l_block.dart';
-import '../data/datasources/block/game_block/o_block.dart';
-import '../data/datasources/block/game_block/s_block.dart';
-import '../data/datasources/block/game_block/t_block.dart';
-import '../data/datasources/block/game_block/z_block.dart';
-import '../data/datasources/block/sub_block.dart';
+import '../../data/data_notifier.dart';
+import '../../data/datasources/block/block.dart';
+import '../../data/datasources/block/block_movement.dart';
+import '../../data/datasources/block/game_block/i_block.dart';
+import '../../data/datasources/block/game_block/j_block.dart';
+import '../../data/datasources/block/game_block/l_block.dart';
+import '../../data/datasources/block/game_block/o_block.dart';
+import '../../data/datasources/block/game_block/s_block.dart';
+import '../../data/datasources/block/game_block/t_block.dart';
+import '../../data/datasources/block/game_block/z_block.dart';
+import '../../data/datasources/block/sub_block.dart';
 
 const BLOCKS_X = 10;
 const BLOCKS_Y = 20;
@@ -230,9 +230,11 @@ class GameState extends State<Game> {
   }
 
   bool checkOnEdge(BlockMovement blockMovement, Block block) {
-    return (blockMovement == BlockMovement.LEFT && block.x <= 0) ||
-        (blockMovement == BlockMovement.RIGHT &&
-            block.x + block.width >= BLOCKS_X);
+    bool condition1 = blockMovement == BlockMovement.LEFT && block.x <= 0;
+    bool condition2 =  (blockMovement == BlockMovement.RIGHT &&
+        block.x + block.width >= BLOCKS_X);
+    return condition1 || condition2;
+
   }
 
   Positioned getPositionedSquareContainer(Color color, int x, int y) {
@@ -313,6 +315,13 @@ class GameState extends State<Game> {
           _blockMovement = BlockMovement.RIGHT;
         } else {
           _blockMovement = BlockMovement.LEFT;
+        }
+      },
+      onVerticalDragUpdate: (details){
+        if(details.delta.dy > 0){
+          debugPrint("down");
+        }else{
+          debugPrint("up");
         }
       },
       onTap: () {
