@@ -6,12 +6,12 @@ import 'package:tetris_game/src/domain/entities/logic_game_param.dart';
 import '../../core/usecase.dart';
 import '../../data/datasources/block/block.dart';
 import '../../data/datasources/block/sub_block.dart';
+import '../../injector.dart';
 import '../entities/logic_game_entity.dart';
 
 class LogicGame implements UseCase<LogicGameEntity?, LogicGameParam> {
-  final GameConfig _gameConfig;
+  final GameConfig _gameConfig = injector.get<GameConfig>();
 
-  LogicGame(this._gameConfig);
 
   @override
   Future<LogicGameEntity?> call({LogicGameParam? params}) {
@@ -83,7 +83,13 @@ class LogicGame implements UseCase<LogicGameEntity?, LogicGameParam> {
       }
     }
 
-    return LogicGameEntity(block, oldSubBlocks, score, isGameOver);
+
+    return LogicGameEntity(
+        block: block,
+        oldSubBlocks: oldSubBlocks,
+        score: score,
+        isGameOver: isGameOver
+    );
   }
 
 

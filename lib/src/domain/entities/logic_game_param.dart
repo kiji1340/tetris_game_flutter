@@ -9,5 +9,9 @@ class LogicGameParam {
   BlockMovement? blockMovement;
   int score;
 
-  LogicGameParam(this.block, this.oldSubBlocks, this.blockMovement, this.score);
+  LogicGameParam(
+      {required this.block,
+      required this.oldSubBlocks,
+      this.blockMovement,
+      required this.score});
 }

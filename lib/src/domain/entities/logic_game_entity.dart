@@ -4,9 +4,13 @@ import '../../data/datasources/block/block.dart';
 
 class LogicGameEntity {
   Block block;
-  List<SubBlock> oldSubBlock;
+  List<SubBlock> oldSubBlocks;
   int score;
   bool isGameOver;
 
-  LogicGameEntity(this.block, this.oldSubBlock, this.score, this.isGameOver);
+  LogicGameEntity(
+      {required this.block,
+      required this.oldSubBlocks,
+      required this.score,
+      required this.isGameOver});
 }
