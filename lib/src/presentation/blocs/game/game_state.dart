@@ -14,9 +14,10 @@ class DrawingState extends GameState {
 }
 
 class UpdateScoreState  extends GameState{
+  final List<SubBlock> oldSubBlocks;
   final int score;
 
-  UpdateScoreState(this.score);
+  UpdateScoreState(this.oldSubBlocks, this.score);
 }
 
 class DrawingNextBlockState extends GameState{

@@ -1,5 +1,7 @@
 import '../../data/datasources/block/sub_block.dart';
 
 class LogicScoreEntity {
-  LogicScoreEntity({required List<SubBlock> oldSubBlocks, required int score});
+  List<SubBlock> oldSubBlocks;
+  int score;
+  LogicScoreEntity({required this.oldSubBlocks, required this.score});
 }
