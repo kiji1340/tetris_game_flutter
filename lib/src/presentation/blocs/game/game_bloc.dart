@@ -25,6 +25,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc(this._interactors) : super(GameInitialState()) {
     on<GameEvent>((event, emit) {
       if (event is StartGameEvent) {
+        emit.call(GamePlayingState(true));
         _startGame(emit);
         _onPlay(emit);
         _updateScore(emit);

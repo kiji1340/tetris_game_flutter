@@ -37,7 +37,7 @@ class _NextBlock extends State<NextBlock> {
             child: Container(
               color: Colors.indigo[600],
               child: Center(
-                child: context.watch<DataNotifier>().getNextBlockWidget(),
+                child: Container(),
               ),
             ),
           ),

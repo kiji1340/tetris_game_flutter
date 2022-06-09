@@ -25,14 +25,15 @@ const SUB_BLOCK_EDGE_WIDTH = 2.0;
 
 enum Collision { LANDED, LANDED_BLOCK, HIT_WALL, HIT_BLOCK, NONE }
 
-class Game extends StatefulWidget {
-  const Game({Key? key}) : super(key: key);
+class GameView extends StatefulWidget {
+  const GameView({Key? key}) : super(key: key);
+
 
   @override
-  State createState() => GameState();
+  State createState() => GameViewState();
 }
 
-class GameState extends State<Game> {
+class GameViewState extends State<GameView> {
   bool _isGameOver = false;
   final GlobalKey _gameAreaKey = GlobalKey();
   Duration duration = const Duration(milliseconds: REFRESH_RATE);

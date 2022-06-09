@@ -21,12 +21,12 @@ class _ScoreBarState extends State<ScoreBar> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: const <Widget>[
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
             child: Text(
-              'Score:  ${context.watch<DataNotifier>().score}',
-              style: const TextStyle(
+              'Score:',
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,

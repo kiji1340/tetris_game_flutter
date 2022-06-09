@@ -6,6 +6,12 @@ abstract class GameState {}
 class GameInitialState extends GameState {}
 
 
+class GamePlayingState extends GameState{
+   final bool isPlaying;
+   GamePlayingState(this.isPlaying);
+}
+
+
 class DrawingState extends GameState {
   final Block block;
   final List<SubBlock> oldSubBlocks;
