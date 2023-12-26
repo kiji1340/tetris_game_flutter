@@ -57,6 +57,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    namespace 'com.dbao1608.tetris_game'
 }
 
 flutter {

@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dbao1608.tetris_game">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
    <application
         android:label="tetris_game"
         android:name="${applicationName}"
