@@ -82,7 +82,7 @@ class _TetrisState extends State<Tetris> {
                                       fontSize: 18,
                                       color: Colors.grey[200],
                                     ),
-                                    primary: Colors.indigo[700]),
+                                    backgroundColor: Colors.indigo[700]),
                                 onPressed: () {
                                   context.read<DataNotifier>().isPlaying
                                       ? _gameKey.currentState!.endGame()
